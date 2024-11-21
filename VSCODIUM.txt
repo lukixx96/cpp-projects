@@ -1,0 +1,145 @@
+
+PREPARAZIONE AL C++
+
+1. Installazione di Code Runner: 
+	è un'estensione di VSCodium che altro non fa che far apparire il bottone per l'esecuzione del
+	codice, equivalente ad eseguire il comando 'g++ -o <file>.cpp <exe>'
+	
+2. Installazione di MinGW-64
+	L'ho installato tramite chocolatey perchè non disponibile in winget:
+		choco info mingw
+		choco install mingw
+		(C:\ProgramData\mingw64)
+	che setta automaticamente la path con il percorso ai bin di mingw (e va bene sia a 64 che 32)
+	
+	2.1. Cos'è g++?
+		g++ è il compilatore C++ della suite GNU Compiler Collection (GCC). La GCC è stata 
+		originariamente sviluppata per sistemi GNU/Linux e fa parte del progetto GNU. Essendo 
+		open-source, è stata portata su altri sistemi operativi (compresi macOS e Windows) 
+		attraverso progetti specifici.
+	2.2. Come funziona g++ su Windows?
+		Su Windows, g++ non può essere eseguito direttamente perché è stato progettato per 
+		funzionare in ambienti Unix-like. Per questo motivo sono stati sviluppati ambienti e 
+		strumenti che consentono di usare g++ su Windows. Uno di questi strumenti è MinGW.
+	2.3. Cos'è MinGW?
+		MinGW sta per Minimalist GNU for Windows.
+		È un progetto che fornisce:
+		-Una versione di GCC compatibile con Windows (incluso il compilatore g++).
+		-Strumenti essenziali (ad esempio, linker e librerie) per creare applicazioni native per 
+		 Windows.
+		MinGW traduce le chiamate di sistema Unix-like in chiamate native di Windows, permettendo 
+		a GCC di funzionare senza problemi.
+		Caratteristiche principali di MinGW:
+		-Compila programmi che funzionano nativamente su Windows (non richiedono un ambiente 
+		 aggiuntivo come Cygwin).
+		-Include librerie standard di Windows (come kernel32.dll) per supportare lo sviluppo 
+		 di applicazioni Windows.
+	2.4. Differenze tra MinGW e altri ambienti
+		MinGW:
+		-Compila programmi nativi per Windows.
+		-Non fornisce un ambiente Unix completo.
+		-È leggero e diretto, pensato per chi vuole creare eseguibili per Windows senza fronzoli.
+		Cygwin:
+		-Fornisce un ambiente Unix-like completo su Windows.
+		-Emula un sistema operativo Unix su Windows, includendo strumenti come bash e make.
+		-Gli eseguibili compilati spesso dipendono dall'ambiente Cygwin (ad esempio, richiedono 
+		 cygwin1.dll).
+	2.5. Come g++ su Windows interagisce con MinGW
+		MinGW include una versione personalizzata di GCC (quindi anche g++) che è stata adattata 
+		per funzionare su Windows. Quando installi MinGW, ottieni una versione di g++ che può:
+		-Compilare il codice C++.
+		-Collegare il codice con librerie native di Windows.
+		-Generare eseguibili .exe che funzionano direttamente su Windows.
+	2.6. Perché GNU gira su Windows?
+		Il software GNU è progettato per essere portabile, cioè può essere adattato a diversi 
+		sistemi operativi. Progetti come MinGW e Cygwin hanno reso possibile l'adattamento di 
+		strumenti GNU su Windows.
+	2.7. Differenza tra GCC/MinGW e altri compilatori
+		MSVC (Microsoft Visual C++):
+		-È il compilatore ufficiale di Microsoft.
+		-È integrato in Visual Studio e altamente ottimizzato per Windows.
+		-Non è open-source.
+		Clang/LLVM:
+		-Un compilatore alternativo, open-source, progettato per essere modulare e performante.
+		-Anche Clang può essere usato su Windows, spesso con l'aiuto di MinGW o strumenti simili.
+	2.8. Come scegliere?
+		Perché usare g++/MinGW su Windows?
+		-È open-source e gratuito.
+		-Consente di sviluppare in un ambiente simile a quello Unix.
+		-È leggero e diretto.
+		Quando usare MSVC?
+		-Se stai sviluppando esclusivamente per Windows e vuoi utilizzare le API e gli 
+		 strumenti di Microsoft.
+	2.9. Come verificare se stai usando MinGW?
+		'g++ --version'
+		
+3. Modifica delle impostazioni terminale VSCodium:
+	[Ctrl + ,] per aprire le impostazioni
+	cerca 'code-runner: run in Terminal' e spunta: di defautl VSCodium esegue gli eseguibili
+	sulla scheda 'OUTPUT' che però non supporta l'input da testiera non essendo pensata come
+	un terminale interattivo.
+
+4. Modifica le impostazioni per buildare il progetto con più .cpp
+	[Ctrl + ,] per aprire le impostazioni
+	cerca 'code-runner.executorMap' e apri il JSON:
+		(old) "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+		(new) "cpp": "cd $dir && g++ *.cpp -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+	It worked!!!!
+	
+[cosa sono Msys2 e MinGW Cygwin Posix
+https://www.reddit.com/r/learnprogramming/comments/k0gelm/what_are_msys2_and_mingw/?tl=it]
+
+[cos'è CMake (brevemente crea un Makefile per Windows 
+https://www.reddit.com/r/cpp_questions/comments/12kowb4/what_does_something_like_cmake_do_and_what_is_its/]
+
+5. Installazione di 'make' 
+	tramite chocolatey ho installato make, ovvero il (programma che richiamo come) comando che
+	legge il Makefile su cui sono riportate le istruzioni su come compilare il progetto.
+	
+6. Comandi Unix-like per il make
+	Allo stato attuale (solo mingw e make) non ho tutta una serie di comandi unix-like come per 
+	esempio il comando 'rm', quindi il 'make clean' scritto in forma compatibile con unix
+	non funziona:
+	- o uso il comando 'del' nativo di windows per rimuovere file;
+	- o installo i comandi unix-like in windows (MSYS2)
+	-> preferisco installare MSYS2: choco install msys2 (C:\tools\msys64)
+	
+7. Installazione CMake
+	Non so bene cosa sia, l'ho installato tramite winget
+	winget install Kitware.CMake 
+	serve per rendere portabile tra windows e unix il makefile
+	(in Program Files>CMake)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
