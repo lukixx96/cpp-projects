@@ -1,8 +1,15 @@
 
 #include <iostream>
+#include "header.h"
 
 using namespace std;
 
+void func1( int );
+void func2( );
+
+void use_static( void );
+void use_static_2( void );
+ 
 int main() {
 
     /* cout << sizeof( int ) << " " 
@@ -65,13 +72,57 @@ int main() {
 
     cout << flag << " " << flag1 << endl;
 
-    int dim = 10;
+/*     int dim = 10;
     int vec[dim];
     for( int i = 0; i < dim; i++ ){
         vec[ i ] = i;
         cout << vec[ i ] << endl;
+    } */    //ESEMPIO DI CATTIVA PROGRAMMAZIONE
+
+    int shm = 2;
+
+    func1( 1 );
+    func2();    //even though shm masks global extern shm, the 'shm' func1 and func2 refer is the external global
+
+    cout << shm << " " << endl; //::shm won't work: once global scope is masked you cannot access directly to ex glob anynore
+
+    int prova;
+    cout << prova << endl; //monnezza
+
+    prova = 3;
+    /* int *restrict pointer = &prova; //teoricamente se provo ad accedere con un altro puntatore dovrebbe essere contro l'intenzione
+                                    // del programmatore
+    cout << pointer << " " << *pointer << " " << &pointer << endl; */ //non funziona perchè il compilatore non implementa restrict
+
+    int count = 10;
+    while( count-- ){
+        use_static();
     }
+    cout << endl;
+    count = 10;
+    while( count-- ){
+        use_static_2();
+    }    
+    cout << endl;
+    // static local variables with same identifier in different functions are not shared!!
+    // static is persistent for a single function throughout every call but not shared with other functions
 
     return 0;
+
+}
+
+void use_static( void ){
+
+    static int count = 5;
+    count--;
+    cout << count << " ";
+
+}
+
+void use_static_2( void ){
+
+    static int count = 5;
+    count++;
+    cout << count << " ";
 
 }
