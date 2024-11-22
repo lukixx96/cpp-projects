@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "header.h"
+#include "globs.h"
 
 using namespace std;
 
@@ -9,6 +10,8 @@ void func2( );
 
 void use_static( void );
 void use_static_2( void );
+
+int xtglb = 29; //ocazz pure lui
  
 int main() {
 
@@ -106,6 +109,25 @@ int main() {
     cout << endl;
     // static local variables with same identifier in different functions are not shared!!
     // static is persistent for a single function throughout every call but not shared with other functions
+
+    /* glb = 29; //ocazz
+    cout << "main chiama: glb = " << glb << endl;
+    //fglob();
+    cout << "main chiama: glb = " << glb << endl;  */
+
+    //OSS1: non posso avere una global (nè extern nè static) in un header incluso da più sorgenti altrimenti ho multiple
+    // definition error.
+    // SOL1. VARIABILE CONDIVISA: dichiararla extern nell'header (quindi in tutti i sorgenti che lo includono) e definirla in 1 solo
+    // SOL2. VARIABILE NON-CONDIVISA: dichiarata/definita static nell'header, sarà globale per un singolo file ma non per tutti.
+
+    cout << "main chiama: xtglb = " << xtglb << endl;
+    xglob();
+    cout << "main dopo xglob chiama: xtglb = " << xtglb << endl;
+
+    stglb += 18;
+    cout << "main chiama: stglb = " << stglb << endl;
+    sglob();
+    cout << "main dopo sglob chiama: stglb = " << stglb << endl;
 
     return 0;
 
