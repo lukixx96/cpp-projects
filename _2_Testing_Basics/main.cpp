@@ -2,6 +2,7 @@
 #include <iostream>
 #include "header.h"
 #include "globs.h"
+#include <ctime>
 
 using namespace std;
 
@@ -12,6 +13,10 @@ void use_static( void );
 void use_static_2( void );
 
 int xtglb = 29; //ocazz pure lui
+
+enum class Color2{
+    cyan = 2, magenta, yellow
+};
  
 int main() {
 
@@ -128,6 +133,31 @@ int main() {
     cout << "main chiama: stglb = " << stglb << endl;
     sglob();
     cout << "main dopo sglob chiama: stglb = " << stglb << endl;
+
+    srand( ( unsigned ) time( NULL ) );
+    int j = rand();
+    cout << "rng: " << j << endl;
+
+    enum Day {
+        mon, tue, wed, thu = 5, fri, sat = 9, sun
+    };
+    Day day = fri;
+    int value1 = day;
+    cout << "Unscoped enum: " << day << " " << value1 << endl;
+
+    enum class Color{
+        red, green, blue
+    };
+    Color myColor = Color::red;
+    //Color myColor2 = red; // è errore: devo accedere a 'red' con SRO
+    int value2 = static_cast< int >( myColor );
+    //int value2 = myColor; // è errore: non posso convertire implicitamente
+    cout << "Scoped enum: " << value2 << endl;
+    // cout << myColor << " " << endl; genera problemi: non so se dovuto al fatto che l'enum non sia globale i.q.c.
+
+    Color2 myColor2 = Color2::cyan;
+    // cout << "Global scoped enum: " << myColor2 << endl; non corretto anche con enum globale
+    cout << "Global scoped enum: " << static_cast< int >( myColor2 ) << endl;
 
     return 0;
 
