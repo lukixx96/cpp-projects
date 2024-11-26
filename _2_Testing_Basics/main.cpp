@@ -4,6 +4,11 @@
 #include "globs.h"
 #include <ctime>
 
+//per aspettare 3 secondi
+#include <thread>
+#include <chrono>
+//
+
 using namespace std;
 
 void func1( int );
@@ -17,6 +22,8 @@ int xtglb = 29; //ocazz pure lui
 enum class Color2{
     cyan = 2, magenta, yellow
 };
+
+int& reffun( int );
  
 int main() {
 
@@ -159,6 +166,100 @@ int main() {
     // cout << "Global scoped enum: " << myColor2 << endl; non corretto anche con enum globale
     cout << "Global scoped enum: " << static_cast< int >( myColor2 ) << endl;
 
+    reffun( 2 );        // stampa q=17*i=2 -> 34
+    reffun( 3 ) = 4;    // stampa q=17*i=3 -> 51 e poi aggiorna q (static) al valore 4 grazie alla ref to static
+    reffun( 3 );        // stampa q=4*i=3 -> 12
+    
+
+    clock_t runtime;
+    runtime = clock();
+    cout << "[ clock() ] main() execution: " << runtime << endl;
+    std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+    runtime = clock();
+    cout << "[ clock() ] main() execution afer 1 sec: " << runtime << endl;
+
+    time_t sys_time;
+    sys_time = time( &sys_time );
+    cout << "[ time() ] Seconds elapsed from 1/1/1970 till now: " << sys_time << endl;
+
+    char *date_string;
+    date_string = ctime( &sys_time );
+    cout << "[ ctime() ] Formatted data: " << date_string; //alla fine della strina c'è \n e \0
+
+    std::this_thread::sleep_for( std::chrono::seconds( 2 ) );
+    time_t sys_time_2;
+    sys_time_2 = time( &sys_time_2 );
+    tm *time_struct;
+    time_struct = localtime( &sys_time_2 );
+    cout << "[ localtime() ] Structured local time (2nd sys_time): " << endl << "\t"
+        << time_struct->tm_wday << " " 
+        << time_struct->tm_year << " "
+        << time_struct->tm_mon << " "
+        << time_struct->tm_mday << " "
+        << time_struct->tm_hour << " " 
+        << time_struct->tm_min << " "
+        << time_struct->tm_sec << " "
+        << time_struct->tm_yday << " "
+        << time_struct->tm_isdst << endl;
+
+    char *date_string_2;
+    date_string_2 = asctime( time_struct );
+    cout << "[ asctime() ] Formatted data: " << date_string_2; //alla fine della stringa c'è \n e \0
+    // NON SI PASSA UNA STRUCT PUNT CON & MA SOLO CON L'HANDLER.
+
+    tm *utc_time;
+    utc_time = gmtime( &sys_time_2 );
+    cout << "[ gmtime() ] Structured UTC time (2nd sys_time):" << endl << "\t"
+        << utc_time->tm_wday << " " 
+        << utc_time->tm_year << " "
+        << utc_time->tm_mon << " "
+        << utc_time->tm_mday << " "
+        << utc_time->tm_hour << " " 
+        << utc_time->tm_min << " "
+        << utc_time->tm_sec << " "
+        << utc_time->tm_yday << " "
+        << utc_time->tm_isdst << endl; 
+
+    time_t utc_time_calendar;
+    utc_time_calendar = mktime( utc_time );
+    cout << "[ mktime() ] Calendar-time eqv of UTC struct: " << utc_time_calendar << endl;
+
+    double elapsed;
+    elapsed = difftime( sys_time_2, sys_time );
+    cout << "[ difftime() ] Time interval (supposed 2sec): " << elapsed << endl;
+
+    /* size_t strftime(char *buffer, size_t maxSize, const char *format, const struct tm *timeptr);
+
+        buffer: dove verrà salvata la stringa formattata.
+        maxSize: dimensione massima del buffer.
+        format: stringa di specifica del formato (es. %Y-%m-%d).
+        timeptr: puntatore alla struttura tm da formattare.
+
+        return:
+        Numero di caratteri scritti (escluso il terminatore \0).
+        0 se il buffer  è troppo piccolo.
+
+        Formati principali:
+        Data:
+        %Y: anno (es. 2024)
+        %m: mese (01-12)
+        %d: giorno (01-31)
+        Ora:
+        %H: ore (00-23)
+        %M: minuti (00-59)
+        %S: secondi (00-59)
+        Combinazioni:
+        %F: data completa (YYYY-MM-DD)
+        %T: orario completo (HH:MM:SS)   */
+ 
+    time_t now = time( NULL );
+    struct tm *timeInfo = localtime( &now );
+    char buffer[100];
+    strftime( buffer, sizeof( buffer ), "%Y/%m/%d %H:%M:%S", timeInfo );
+    cout << "[ strftime() ] Orario formattato: " << buffer << endl; 
+    strftime( buffer, sizeof( buffer ), "%F %T", timeInfo );   
+    cout << "[ strftime() ] Orario formattato (%F e %T): " << buffer << endl;
+    
     return 0;
 
 }
@@ -176,5 +277,16 @@ void use_static_2( void ){
     static int count = 5;
     count++;
     cout << count << " ";
+
+}
+
+int& reffun( int i ){
+
+    static int q = 17;
+    cout << "Sofia ha detto: " << q*i << endl;
+
+    //int local_var
+    //return local_var // compiler error
+    return q; 
 
 }
