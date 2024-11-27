@@ -23,6 +23,13 @@ public:
         }
     }
 
+    // Funzione di conversione implicita a int (non si possono avere 2 funz di conv impl verso lo stesso tipo)
+    /* operator int() const { 
+        return code_;
+    } */
+    // Se aggiungo l'altra conversione implicita ottengo l'errore di compilazione:
+    // "candidate conversions include 'Light::operator int() const' and 'Light::operator Color() const'"
+
 private:
     int code_;
 };
@@ -53,4 +60,5 @@ int main() {
     // for( every element of that type :(in) array of elements of that type  )
 
     return 0;
+    
 }
