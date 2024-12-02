@@ -2,6 +2,7 @@
 #include <iostream>
 
 #define DIM 100
+#define MAX 3
 
 int main() {
 
@@ -65,8 +66,32 @@ int main() {
         << ", *( inputCharPtr + 1 ): " << *( inputCharPtr + 1 ) << std::endl; 
     // *( inputCharPtr + 1 ) ritorna il secondo carattere (dereferenziazione del 2 elemento puntato dall'arr)
 
-    char *testCharPtr = "Hello"; // -> warning since ISO C++ forbids converting a string constant to 'char*'
-    const char *testCharPtr2 = "Hello"; // ok!
+    char *testCharPtr = "HelloWorld"; // -> warning since ISO C++ forbids converting a string constant to 'char*'
+    const char *testCharPtr2 = "HelloWorld"; // ok!
+    std::cout << std::endl;
+
+    // per il significato del const leggi da dx verso sx:
+    char base[ MAX ] = "Hi";
+    char *basePtr = base;
+
+    // puntatore a char costante -> 
+    const char *constBasePtr = base;
+    std::cout << "constBasePtr: " << constBasePtr;
+    // -> POSSO riassegnare
+    constBasePtr = greeting;
+    std::cout << " => " << constBasePtr << std::endl;
+    // -> NON POSSO modificare il contenuto puntato mediante dereferenziazione
+    // *( constBasePtr + 1 ) = 'o'; -> compile error: assignment to read-only location
+
+    // puntatore costante a char
+    char *const baseConstPtr = base;
+    std::cout << "baseConstPtr: " << baseConstPtr;
+    // -> POSSO modificare il contenuton puntato mediante dereferenziazione
+    *( baseConstPtr + 1 ) = 'o';
+    std::cout << " => " << baseConstPtr << std::endl;
+    // -> NON POSSO riassegnare
+    // baseConstPtr = greeting; -> compile error: assignment to read-only location
+    std::cout << std::endl;
 
     return 0;
 
