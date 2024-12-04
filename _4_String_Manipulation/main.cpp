@@ -74,7 +74,7 @@ int main() {
     char base[ MAX ] = "Hi";
     char *basePtr = base;
 
-    // puntatore a char costante -> 
+    // puntatore a char costante (AKA stringa C-Style) ->
     const char *constBasePtr = base;
     std::cout << "constBasePtr: " << constBasePtr;
     // -> POSSO riassegnare
@@ -83,7 +83,7 @@ int main() {
     // -> NON POSSO modificare il contenuto puntato mediante dereferenziazione
     // *( constBasePtr + 1 ) = 'o'; -> compile error: assignment to read-only location
 
-    // puntatore costante a char
+    // puntatore costante a char ->
     char *const baseConstPtr = base;
     std::cout << "baseConstPtr: " << baseConstPtr;
     // -> POSSO modificare il contenuton puntato mediante dereferenziazione
@@ -92,6 +92,48 @@ int main() {
     // -> NON POSSO riassegnare
     // baseConstPtr = greeting; -> compile error: assignment to read-only location
     std::cout << std::endl;
+
+    // array of MAX pointers to char costant (AKA array di stringhe C-Style)
+    const char *arrOf_CharPtr[MAX] = { "hello", "world", "cinque" }; // a fourth string (4>MAX) results in compiler error
+    char *arrOf_nonconst_CharPtr[MAX] = { "hello", "world", "cinque" };
+    // ^ non-constant throws a warning because "ISO C++ forbids converting a string constant to 'char*'"
+    // a warning for each string, since each of them is going to be converted to 'char*'
+    std::cout << "arrOf_CharPtr: {";
+    for( int i = 0; i < MAX; i++ ){
+       if( !( i == MAX - 1 ) ) std::cout << arrOf_CharPtr[i] << ",";
+       else std::cout << arrOf_CharPtr[i];
+    }
+    std::cout << "}" << std::endl;
+    // since it is a array of strings and not a string, printing the handler result in array decay
+    std::cout << "arrOf_CharPtr = " << arrOf_CharPtr << std::endl << std::endl;
+
+    // pointer to (a whole) array of MAX char constants
+    const char ( *ptr_ArrayOfChar )[MAX] = &"hi"; //error: "hii" or "h"
+    //"hii" is a const char [4] while &"hii" is a const char (*)[4]: 
+    // 1. const is needed in declaration because it refers to pointed value which is const;
+    // 2. MAX and litteral dimension must be EXACTLY EQUAL, neither bigger nor smaller.
+    // this clarifies '&' operator: &x returns a pointer to the same type of x, thus if x is 'int []' &x is 'int (*)[]'
+    std::cout << "ptr_ArrayOfChar: " << ptr_ArrayOfChar << " -> " << *ptr_ArrayOfChar << std::endl;
+    // *ptr_ArrayOfChar is a const char [MAX] which  
+
+    // like strings, when initializing, the compiler has information to know the correct dimension so it is possible:
+    const char ( *ptr_ArrayOfChar_nodim )[] = &"Many Chars You Want";
+    std::cout << "ptr_ArrayOfChar_nodim: " << ptr_ArrayOfChar_nodim << " -> " << *ptr_ArrayOfChar_nodim << std::endl;
+
+/*     const char *(*ptr_CharPtr) = (const char**)&"hi";
+    std::cout << ptr_CharPtr << " -> " << *ptr_CharPtr << " -> " << **ptr_CharPtr << std::endl;
+
+    ----> unpredictable behaviors
+
+    DOES NOT MAKE SENSE: &"hi" is not a const char **
+    Think of a const char (*)[3] as a box containing a row of three letters, while a const char ** is a box containing 
+    a note with the address of another box. You cannot directly treat a box of letters as a box of addresses—they 
+    represent fundamentally different layouts.
+    The incompatibility arises because:
+    Type mismatch: A const char (*)[3] points to an array of exactly 3 const char, while a const char ** points 
+    to a const char * (a pointer to a single character). The memory layout and interpretation are entirely different.
+    Dereferencing issues: Treating a const char (*)[3] as a const char ** and dereferencing it would interpret the data 
+    incorrectly, leading to undefined behavior. */
 
     return 0;
 
