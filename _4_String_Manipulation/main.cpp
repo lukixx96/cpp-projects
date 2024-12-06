@@ -1,5 +1,7 @@
 
 #include <iostream>
+//#include <cstring> // std namespace
+#include <string.h> // global namespce -> no qualificator:: needed
 
 #define DIM 100
 #define MAX 3
@@ -65,6 +67,7 @@ int main() {
     std::cout << "inputCharPtr: " << inputCharPtr 
         << ", *( inputCharPtr + 1 ): " << *( inputCharPtr + 1 ) << std::endl; 
     // *( inputCharPtr + 1 ) ritorna il secondo carattere (dereferenziazione del 2 elemento puntato dall'arr)
+    delete inputCharPtr;
 
     char *testCharPtr = "HelloWorld"; // -> warning since ISO C++ forbids converting a string constant to 'char*'
     const char *testCharPtr2 = "HelloWorld"; // ok!
@@ -119,6 +122,7 @@ int main() {
     // like strings, when initializing, the compiler has information to know the correct dimension so it is possible:
     const char ( *ptr_ArrayOfChar_nodim )[] = &"Many Chars You Want";
     std::cout << "ptr_ArrayOfChar_nodim: " << ptr_ArrayOfChar_nodim << " -> " << *ptr_ArrayOfChar_nodim << std::endl;
+    std::cout << std::endl;
 
 /*     const char *(*ptr_CharPtr) = (const char**)&"hi";
     std::cout << ptr_CharPtr << " -> " << *ptr_CharPtr << " -> " << **ptr_CharPtr << std::endl;
@@ -134,6 +138,40 @@ int main() {
     to a const char * (a pointer to a single character). The memory layout and interpretation are entirely different.
     Dereferencing issues: Treating a const char (*)[3] as a const char ** and dereferencing it would interpret the data 
     incorrectly, leading to undefined behavior. */
+
+    // with <string.h> -> no need of std::<string_function>
+    char str1[] = "Hello";
+    char str2[] = "World";
+    char str3[ DIM ];
+
+    strcpy( str3, str1 ); // copied str1 into str3 <-> ASSIGNMENT STR3 = STR1
+    std::cout << "str1 copied into str3: " << str3 << std::endl;
+
+    strcat( str3, str2 ); // concatenates str2 to str3 and modifies str3 <-> STR3 = STR3 + STR2
+    std::cout << "str2 concatenated to str3: " << str3 << std::endl;
+
+    int length3 = strlen( str3 );
+    std::cout << "str3 length: " << length3 << std::endl;
+
+    int more11, more31, more13;
+    strcpy( str1, "HelLo" );
+    std::cout << "new str1: " << str1 << " -> ";
+    more11 = strcmp( str1, str1 );  // compares 2 string and returns 0 if their are the same or
+    more13 = strcmp( str1, str3 );  // 1 (int)leftStr[i] > (int)rightStr
+    more31 = strcmp( str3, str1 );  // -1 (int)leftStr[i] < (int)rightStr
+    std::cout << "\n\tstr1 > str1 ? " << more11 << " \t<->\t str1 == str1" 
+        << "\n\tstr1 > str3 ? " << more13 << " \t<->\t NO ( because (int)L < (int)l )"
+        << "\n\tstr3 > str1 ? " << more31 << " \t<->\t YES ( because (int)L < (int)l )" << std::endl;
+
+    char *firstCharOcc, *firstStrOcc;
+    firstCharOcc = strchr( str3, 'l' );
+    firstStrOcc = strstr( str3, "loW" );
+    std::cout << "firstCharOcc of 'l': " << firstCharOcc << std::endl;
+    std::cout << "firstStrOcc of \"loW\": " << firstStrOcc << std::endl;
+    firstCharOcc = strchr( str3, 'M' );
+    firstStrOcc = strstr( str3, "low" );
+    if( firstCharOcc == NULL ) std::cout << "firstCharOcc of 'M': NULL" << std::endl;
+    if( firstStrOcc == 0 ) std::cout << "firstStrOcc of \"low\": NULL" << std::endl;
 
     return 0;
 
