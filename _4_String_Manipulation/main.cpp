@@ -2,6 +2,7 @@
 #include <iostream>
 //#include <cstring> // std namespace
 #include <string.h> // global namespce -> no qualificator:: needed
+#include "header.h"
 
 #define DIM 100
 #define MAX 3
@@ -36,7 +37,7 @@ int main() {
     std::cout << std::endl;
 
     char inputStr[ DIM ];
-    std::cin >> inputStr;
+    strcpy( inputStr, "Stringa1" );//std::cin >> inputStr;
     for( int i = 0; i < DIM; i++ ){
         if( inputStr[ i ] == '\0' ) {
             std::cout << "Terminator \'\\0\' found" << std::endl;
@@ -57,7 +58,7 @@ int main() {
     char *inputCharPtr = new char[ DIM ]; //per inserire una stringa da tastiera devo avere memoria allocata
     // OSS: è allocazione dinamica ma inutile perchè DIM è conosciuto a tempo di compilazione
     // std::cin >> *inputCharPtr; // se lascio così sto derefernziando, quindi sto puntando al primo elemento
-    std::cin >> inputCharPtr;
+    strcpy( inputCharPtr, "Stringa2" ); //std::cin >> inputCharPtr;
     for( int i = 0; i < DIM; i++ ){
         if( inputCharPtr[ i ] == '\0' ) {
             std::cout << "Terminator \'\\0\' found" << std::endl;
@@ -67,7 +68,7 @@ int main() {
     std::cout << "inputCharPtr: " << inputCharPtr 
         << ", *( inputCharPtr + 1 ): " << *( inputCharPtr + 1 ) << std::endl; 
     // *( inputCharPtr + 1 ) ritorna il secondo carattere (dereferenziazione del 2 elemento puntato dall'arr)
-    delete inputCharPtr;
+    delete [] inputCharPtr;
 
     char *testCharPtr = "HelloWorld"; // -> warning since ISO C++ forbids converting a string constant to 'char*'
     const char *testCharPtr2 = "HelloWorld"; // ok!
@@ -172,6 +173,9 @@ int main() {
     firstStrOcc = strstr( str3, "low" );
     if( firstCharOcc == NULL ) std::cout << "firstCharOcc of 'M': NULL" << std::endl;
     if( firstStrOcc == 0 ) std::cout << "firstStrOcc of \"low\": NULL" << std::endl;
+
+    std::cout << std::endl << std::endl;
+    string_procedure();
 
     return 0;
 
