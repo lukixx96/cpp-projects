@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include "test.h"
 
 void switch_by_value( int, int );
 void switch_by_pointer( int *, int * );
@@ -79,6 +80,37 @@ int main(){
     int m = 2, n = 3;
     std::cout << "Ackermann( " << m << ", " << n << " ) = " << ackermann( m, n ) << std::endl;
     std::cout << std::endl; 
+
+    std::cout << "REFERENCE RETURNING FUNCTION" << std::endl;
+    std::cout << "(main.cpp scoped) globalVar = " << globalVar << std::endl;
+    globalVar = 15;
+    std::cout << "(main.cpp scoped) new assignment: globalVar = " << globalVar << std::endl;
+    std::cout << "(in main.cpp by reference to test.cpp scoped) globalVar = "; 
+    printGlobalVar() = 20; // Using int& returning function as left hand side
+    std::cout << "(in main.cpp by reference to test.cpp scoped) new assignment: globalVar = ";
+    printGlobalVar();
+    std::cout << std::endl;
+    // by means of reference-returning function a static global variable can be shared and modified
+
+    std::cout << "POINTER RETURNING FUNCTION" << std::endl;
+    std::cout << "(main.cpp scoped) globalVar = " << globalVar << std::endl;
+    globalVar = 35;
+    std::cout << "(main.cpp scoped) new assignment: globalVar = " << globalVar << std::endl;
+    std::cout << "(in main.cpp by reference to test.cpp scoped) globalVar = ";
+    *ptrGlobalVar() = 60;
+    //printGlobalVar() = 20; // Using int& returning function as left hand side
+    std::cout << "(in main.cpp by reference to test.cpp scoped) new assignment: globalVar = ";
+    *ptrGlobalVar();
+    std::cout << std::endl;
+    // by means of pointer-returning function a static global variable can be shared and modified
+
+    std::cout << "OVERLOAD" << std::endl;
+    overloads( 1 );
+    overloads( 1.1 );
+    overloads( 1, 2 );
+    overloads( 1, 2.1 );
+    overloads( 1.1, 2 );
+    overloads( 1.1f );
 
     return 0;
 
