@@ -1,6 +1,8 @@
 
 #include <iostream>
 #include "test.h"
+#include "test2.h"
+
 
 void switch_by_value( int, int );
 void switch_by_pointer( int *, int * );
@@ -111,6 +113,29 @@ int main(){
     overloads( 1, 2.1 );
     overloads( 1.1, 2 );
     overloads( 1.1f );
+    std::cout << std::endl;
+
+    std::cout << "OVERRIDING" << std::endl;
+    Shape *shapePtr;
+    Shape shape;
+    Circle circle;
+    Square square;
+
+    std::cout << "Calling draw() by derived objects" << std::endl;
+    circle.draw();
+    square.draw();
+
+    std::cout << "Calling draw() by base objects" << std::endl;
+    shape = square;
+    shape.draw();    
+    shape = circle;
+    shape.draw();
+ 
+    std::cout << "Calling draw() by base pointers" << std::endl;
+    shapePtr = &square;
+    shapePtr->draw();
+    shapePtr = &circle;
+    shapePtr->draw();
 
     return 0;
 
