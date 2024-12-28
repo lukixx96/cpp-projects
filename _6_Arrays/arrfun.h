@@ -15,4 +15,11 @@ double passingMatrixTo( double [][ COL_N ], int, int );
 /* double passingMatrixTo( double (*)[ COL_N ], int, int );
 double passingMatrixTo( double [ ROW_N ][ COL_N ], int, int ); */
 
+int* returningStaticArray();
+void printStaticArray( int* );
+
+typedef int ArrayCOL[ COL_N ];
+ArrayCOL* returningStaticMatrix();
+void printStaticMatrix( ArrayCOL* );
+
 #endif

@@ -115,8 +115,19 @@ int main() {
     // the 1st dimension only decays AND A POINTER DOESNT DECAY!!
     std::cout << "Passing matrix to function: sum of element is "
         << passingMatrixTo( matrix_2, ROW_N, COL_N ) << std::endl; // -> decays into double (*) [5] (see .cpp, .h)
+    std::cout << std::endl;
+    // Since pointers dont decay, when allocating dynamic N-dim arrays a N-pointer should be passed
 
-    // Since pointers dont decay, when allocating dynamic N-dim arrays a N-pointer should be passed       
+    int *staticArr = returningStaticArray();
+    std::cout << "staticArr = ";
+    printStaticArray( staticArr ); 
+    std::cout << std::endl;       
+
+    // ArrayCOL *staticMat = returningStaticMatrix();
+    int ( *staticMat )[ COL_N ] = returningStaticMatrix();
+    std::cout << "StaticMat = ";
+    printStaticMatrix( staticMat );
+    std::cout << std::endl;
 
     return 0;
 
