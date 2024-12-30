@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include "structs.h"
+#include "unions.h"
 
 struct Point {
     float x, y, z;
@@ -73,7 +74,40 @@ int main() {
     mutableObj.displayValue();
     mutableObj.setValue( 200 );
     mutableObj.displayAllValue();  
-    mutableObj.mutateValue();    
+    mutableObj.mutateValue();
+
+    std::cout << std::endl;
+
+    ////////////////////////////////////////////////////////
+
+    std::cout << "=== Union Memory Size ===" << std::endl;
+    printUnionSize();
+
+    std::cout << "\n=== Union Member Access ===" << std::endl;
+    demonstrateAccess();
+
+    BasicUnion u;
+    u.intValue = 10;
+
+    std::cout << "\n=== Passing Union by Value ===" << std::endl;
+    passUnionByValue( u );
+
+    std::cout << "\n=== Passing Union by Reference ===" << std::endl;
+    passUnionByReference( u );
+    std::cout << "After passUnionByReference: intValue = " << u.intValue << std::endl;
+
+    std::cout << "\n=== Passing Union by Pointer ===" << std::endl;
+    passUnionByPointer( &u );
+    std::cout << "After passUnionByPointer: intValue = " << u.intValue << std::endl;
+
+    std::cout << "\n=== Compiler Error ===" << std::endl;
+    demonstrateUndefinedBehavior();
+
+    std::cout << "\n=== Anonymous Union ===" << std::endl;
+    demonstrateAnonymousUnion();
+
+    std::cout << "\n=== Union-Like Class ===" << std::endl;
+    demonstrateUnionLikeClass();
 
     return 0;
 
